@@ -7,8 +7,8 @@ import random
 from google import search
 
 server = "irc.irchighway.net"       # settings
-channel = "#Corndog" #reddit-manga, normal channel
-botnick = "tempbotBR"
+channel = "#reddit-manga" #reddit-manga, normal channel
+botnick = "weeabot"
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print ("connecting to:"+server)
@@ -98,16 +98,17 @@ while 1:
         too = to.replace(' ', '')
         irc.send('PRIVMSG '+channel+' :http://myanimelist.net/manga.php?q=' + str(to) + '\r\n')
     if text.find(':!help') != -1:
-        t1='This is an open-source bot: you can look at the source at https://github.com/phaseout/IRCMangaBot.git'
-        t2='!roll=rolls a six sided dice, for you'
-        t3='!add (title) adds a title to your personal plain text backlog! !list (name) returns that persons list'
-        t4='!try makes me search baka, you b-baka!'
-        t5='!find makes me search on MAL'
-        irc.send('PRIVMSG '+channel+' :'+t1+ '\r\n')
-        irc.send('PRIVMSG '+channel+' :'+t2+ '\r\n')
-        irc.send('PRIVMSG '+channel+' :'+t3+ '\r\n')
-        irc.send('PRIVMSG '+channel+' :'+t4+ '\r\n')
-        irc.send('PRIVMSG '+channel+' :'+t5+ '\r\n')
+        name=get_name(text)
+        t1=' This is an open-source bot: you can look at the source at https://github.com/phaseout/IRCMangaBot.git'
+        t2=' !roll=rolls a six sided dice, for you'
+        t3=' !add (title) adds a title to your personal plain text backlog! !list (name) returns that persons list'
+        t4=' !try makes me search baka, you b-baka!'
+        t5=' !find makes me search on MAL'
+        irc.send('PRIVMSG '+name+' :'+ t1+ '\r\n')
+        irc.send('PRIVMSG '+name+' :'+ t2+ '\r\n')
+        irc.send('PRIVMSG '+name+' :'+ t3+ '\r\n')
+        irc.send('PRIVMSG '+name+' :'+ t4+ '\r\n')
+        irc.send('PRIVMSG '+name+' :'+ t5+ '\r\n')
 
 
 
