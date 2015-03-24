@@ -70,10 +70,13 @@ def get_name(text):
 
 def trigger(text, trigger):
     #get 4th word in text
-    command = text.split()[3]
-    if(command.find(':!'+trigger) != -1):
-        return True
-    else:
+    try:
+        command = text.split()[3]
+        if(command.find(':!'+trigger) != -1):
+            return True
+        else:
+            return False
+    except:
         return False
 
 def sendMessage(irc, channel, message):
@@ -101,7 +104,8 @@ def rollCMD(irc, text):
     name = name_raw[0].replace(':', '')
     d1 = random.randint(1, 6)
     d2 = random.randint(1, 6)
-    irc.send('PRIVMSG '+channel+' :' + str(name) + ' rolled '+str(d1 + d2)+'! \r\n')
+    sendMessage(irc, channel, str(name)+' rolled '+str(d1 + d2)+'!')
+    #irc.send('PRIVMSG '+channel+' :' + str(name) + ' rolled '+str(d1 + d2)+'! \r\n')
     return
 
 #Command for !find
@@ -109,7 +113,8 @@ def findCMD(irc, text):
     t = text.split(':!find')
     to = t[1].strip()
     too = to.replace(' ', '')
-    irc.send('PRIVMSG '+channel+' :http://myanimelist.net/manga.php?q=' + str(to) + '\r\n')
+    sendMessage(irc, channel, 'http://myanimelist.net/manga.php?q=' + str(to))
+    #irc.send('PRIVMSG '+channel+' :http://myanimelist.net/manga.php?q=' + str(to) + '\r\n')
     return
 
 #Command for !try
@@ -180,6 +185,7 @@ while 1:
 
     #TODO:Check a list of admin nicks
     if trigger(text, 'quit') and text.find('Kamo') != -1: 
+        #Die bot Die
         sys.exit()
 
     if trigger(text, 'hi'):
