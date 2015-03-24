@@ -27,17 +27,18 @@ while 1:
     def usrremind(name):
         file_obj=open("list.txt", 'r')
         data=file_obj.read()
-        index1=data.find('Usr$:'+name)
+        file_obj.close()
+        index1=data.find('Usr%:'+name)
         if index1!=-1:
            index2=data.find("\n",index1) #make sure that there will always be a \n character at the end of a userlist whilst creating the crt_usrremind function
-           return data[index1:index2-1]
+           return data[index1:index2]
         return 'Person not found :( uguuuuuuuu'
 
     def usradd(name, toadd):
          file_obj=open("list.txt", 'r')
          data=file_obj.read()
          file_obj.close()
-         index1=data.find("Usr$:"+name)
+         index1=data.find("Usr%:"+name)
          if index1!=-1:
             index2=data.find("\n",index1)
             data2=data[:index2]
@@ -51,7 +52,10 @@ while 1:
           file_obj.write("Usr%:"+name+" "+toadd+"\n")
           file_obj.close()
           return('created a list for'+name+'and added your weebshit')
-
+    def get_name(text):
+     t=text.split('!')
+     t0=t[0].split(':')[1]
+     return t0
 
     text = irc.recv(2040)  # receive the text
     print(text)
@@ -72,27 +76,40 @@ while 1:
         irc.send('PRIVMSG '+channel+' :' + str(name) + ' rolled '+roll()+'! \r\n')
 
     if text.find(':!name') != -1:
-        t = text.split(':!name')
-        irc.send('PRIVMSG '+channel+t[0]+' '+ t[1]+''+t[2]+ '\r\n')
+        t =get_name(text)
+        irc.send('PRIVMSG '+channel+' :'+t+'\r\n')
 
 
     if text.find(':!list') != -1:
         t = text.split(':!list')
         to = t[1].strip()
         too = to.replace(' ', '')
-        irc.send('PRIVMSG '+channel+usrremind(to) + '\r\n')
+        irc.send('PRIVMSG '+channel+' :'+usrremind(to) + '\r\n')
 
     if text.find(':!add') != -1:
         t = text.split(':!add')
         to = t[1].strip()
         too = to.replace(' ', '')
-        irc.send('PRIVMSG '+channel+usradd(to,to) + '\r\n')
+        irc.send('PRIVMSG '+channel+' :'+usradd(get_name(text),too) + '\r\n')
 
     if text.find(':!find') != -1:
         t = text.split(':!find')
         to = t[1].strip()
         too = to.replace(' ', '')
         irc.send('PRIVMSG '+channel+' :http://myanimelist.net/manga.php?q=' + str(to) + '\r\n')
+    if text.find(':!help') != -1:
+        t1='This is an open-source bot: you can look at the source at https://github.com/phaseout/IRCMangaBot.git'
+        t2='!roll=rolls a six sided dice, for you'
+        t3='!add (title) adds a title to your personal plain text backlog! !list (name) returns that persons list'
+        t4='!try makes me search baka, you b-baka!'
+        t5='!find makes me search on MAL'
+        irc.send('PRIVMSG '+channel+' :'+t1+ '\r\n')
+        irc.send('PRIVMSG '+channel+' :'+t2+ '\r\n')
+        irc.send('PRIVMSG '+channel+' :'+t3+ '\r\n')
+        irc.send('PRIVMSG '+channel+' :'+t4+ '\r\n')
+        irc.send('PRIVMSG '+channel+' :'+t5+ '\r\n')
+
+
 
     if text.find(':!try') != -1:
         t = text.split(':!try')
