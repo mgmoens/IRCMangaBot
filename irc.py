@@ -178,7 +178,8 @@ while 1:
     if text.find('PING') != -1:                        # check if 'PING' is found
         irc.send('PONG ' + text.split() [1] + '\r\n')  # returnes 'PONG' back to the server (prevents pinging out!)
 
-    if (trigger(text, 'quit') and (text.find('Kamo') != -1): #TODO:Check a list of admin nicks
+    #TODO:Check a list of admin nicks
+    if trigger(text, 'quit') and text.find('Kamo') != -1: 
         sys.exit()
 
     if trigger(text, 'hi'):
