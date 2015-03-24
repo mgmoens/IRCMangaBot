@@ -8,7 +8,7 @@ from google import search
 
 server = "irc.irchighway.net"       # settings
 channel = "#Corndog" #reddit-manga, normal channel
-botnick = "tempbot"
+botnick = "tempbotBR"
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print ("connecting to:"+server)
@@ -71,6 +71,10 @@ while 1:
         name = name_raw[0].replace(':', '')
         irc.send('PRIVMSG '+channel+' :' + str(name) + ' rolled '+roll()+'! \r\n')
 
+    if text.find(':!name') != -1:
+        t = text.split(':!name')
+        irc.send('PRIVMSG '+channel+t[0]+' '+ t[1]+''+t[2]+ '\r\n')
+
 
     if text.find(':!list') != -1:
         t = text.split(':!list')
@@ -78,6 +82,11 @@ while 1:
         too = to.replace(' ', '')
         irc.send('PRIVMSG '+channel+usrremind(to) + '\r\n')
 
+    if text.find(':!add') != -1:
+        t = text.split(':!add')
+        to = t[1].strip()
+        too = to.replace(' ', '')
+        irc.send('PRIVMSG '+channel+usradd(to,to) + '\r\n')
 
     if text.find(':!find') != -1:
         t = text.split(':!find')
