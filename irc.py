@@ -87,6 +87,18 @@ def sendPM(irc, name, message):
     irc.send('PRIVMSG '+name+' : '+message + '\r\n')
     return
 
+def getPpl(irc, channel):
+    irc.send('NAMES '+channel+'\r\n')
+    return
+
+def extractNames(text1):
+    terminating_string = text1.split()[0]
+    delete_begin = text1.find('=')
+    delete_end = text1.rfind(terminating_string)
+    User_List = text1[delete_begin+2:delete_end].split()
+    User_List.pop(0)
+    print User_List
+    return User_List
 
 #########################
 ### START OF COMMANDS ###
@@ -168,6 +180,20 @@ def addCMD(irc, text):
     to = t[1].strip()
     irc.send('NOTICE '+get_name(text)+' :' + ' ' + usradd(get_name(text), to) + '\r\n')
     return
+
+# def pplCMD(irc, text):
+#     getPpl(irc, channel)
+#     #poll a few times just incase someone was typing
+#     text1 = irc.recv(2040)  
+#     text2 = irc.recv(2040)  
+#     text3 = irc.recv(2040)
+#     if(text1.find('/NAMES') != -1):
+#         User_List = extractNames(text1)
+#     elif text2.find('/NAMES') != -1:
+#         User_List = extractNames(text2)
+#     elif text3.find('/NAMES') != -1:
+#         User_List = extractNames(text3)
+#     return User_List
 #########################
 ###  END OF COMMANDS  ###
 #########################
@@ -208,6 +234,9 @@ while 1:
 
     if trigger(text, 'add'):
         addCMD(irc, text)
+
+    # if trigger(text, 'ppl'):
+    #     User_List = pplCMD(irc, text)
 
     if trigger(text, 'help'):
         name = get_name(text)
